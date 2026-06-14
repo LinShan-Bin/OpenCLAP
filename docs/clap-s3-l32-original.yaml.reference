@@ -1,0 +1,109 @@
+model:
+  task_name: clap-s3-l32
+  image_channels: 3
+
+  # DINO model configuration
+  dino_model_type: dinov3
+  dino_model_variant: dinov3_vitb16
+  dino_model_path: /kpfs-intern/mycroft/models/dinov3
+  dino_weights_path: /kpfs-intern/mycroft/models/dinov3/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth
+
+  action_space: xyz_rpy
+  chunk_size: 32
+  clap_model_dim: 768
+  clap_latent_dim: 128
+  clap_action_vae_dim: 512
+  clap_num_latents: 512
+  clap_num_t_codes: 8
+  clap_patch_size: 16
+  clap_enc_blocks: 12
+  clap_dec_blocks: 12
+  clap_num_heads: 12
+  action_layers: 15
+
+  # VLM configuration
+  qwen_vl_model_path: /kpfs-intern/mycroft/models/Qwen3-VL-4B-Instruct
+  qwen_vl_variant: qwen3
+  enable_ki: false
+  kl_loss_weight: 0.0
+  enable_lora: false
+  init_new_token_embeddings: true
+  use_action_expert: false
+  use_wrist_camera: true
+  drop_wrist_prob: 0.5
+  drop_state_prob: 0.5
+
+  # Training configuration
+  clap_ckpt: ckpts/clap-s2-l32/epoch=0-step=50000.ckpt
+  optimizer:
+    class_path: torch.optim.AdamW
+    init_args:
+      lr: 5e-5
+      weight_decay: 1e-2
+  learning_rate: 5e-5
+  llm_lr_scale: 1.0
+  warmup_steps: 1000
+  lr_scheduler_type: cosine
+  max_training_steps: 50000
+  min_lr_ratio: 0.2
+  decay_start: 1000  # Step to start decay (after warmup, LR stays constant until this step)
+
+data:
+  data_root: 
+    - /kpfs-intern/datasets/astribot_pretrain
+    - /kpfs-intern/datasets/agibot_data_extracted_selected
+    - /kpfs-intern/datasets/ego4d_lerobot
+    - /kpfs-intern/datasets/lerobot-ipec/droid_lerobot
+  data_mix: all
+  robot_type_sampling_probs:
+    S1-stationary: 200.0
+    agibot-go1: 10.0
+    human: 100.0
+    droid: 1.0
+  batch_size: 4
+  num_workers: 4
+  resolution: [240, 320]
+  fps: 30
+  num_frames: 33
+  delta_timestamps:
+    'cartesian_so3_dict.cartesian_pose_command': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+    'cartesian_so3_dict.cartesian_pose_state': [0]
+    'images_dict.head.rgb': [0, 32]
+    'observation.state': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+    'observation.images.exterior_image_1_left': [0, 32]
+    'observation.images.exterior_image_2_left': [0, 32]
+    'observation.images.wrist_image_left': [0]
+    'images_dict.left.rgb': [0]
+    'images_dict.right.rgb': [0]
+
+trainer:
+  max_steps: 800000
+  accelerator: gpu
+  num_nodes: 1
+  devices: auto
+  strategy: ddp_find_unused_parameters_false
+  precision: bf16-mixed
+  log_every_n_steps: 10
+  gradient_clip_val: 1.0
+  accumulate_grad_batches: 4
+
+  callbacks:
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+      init_args:
+        dirpath: ./ckpts/clap-s3-l32
+        verbose: true
+        save_last: true
+        save_top_k: -1
+        every_n_train_steps: 5000
+
+  logger:
+    - class_path: lightning.pytorch.loggers.TensorBoardLogger
+      init_args:
+        save_dir: ./logs
+        name: clap-s3-l32
+    - class_path: lightning.pytorch.loggers.WandbLogger
+      init_args:
+        project: CLAP-S3
+        name: clap-s3-l32
+        save_dir: ./logs/wandb
+        log_model: false

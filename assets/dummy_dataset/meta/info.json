@@ -1,0 +1,313 @@
+{
+  "codebase_version": "v2.0",
+  "robot_type": "S1-stationary",
+  "total_episodes": 2,
+  "total_frames": 514,
+  "total_tasks": 7,
+  "total_videos": 6,
+  "total_chunks": 1,
+  "chunks_size": 1000,
+  "fps": 30,
+  "splits": {
+    "train": "0:2"
+  },
+  "data_path": "data/chunk-{episode_chunk:03d}/episode_{episode_index:06d}.parquet",
+  "video_path": "videos/chunk-{episode_chunk:03d}/{video_key}/episode_{episode_index:06d}.mp4",
+  "features": {
+    "prompt": {
+      "dtype": "int64",
+      "shape": [
+        512
+      ],
+      "names": "prompt"
+    },
+    "finegrained_prompt": {
+      "dtype": "int64",
+      "shape": [
+        128
+      ],
+      "names": "finegrained_prompt"
+    },
+    "cartesian_so3_dict.cartesian_pose_command": {
+      "dtype": "float64",
+      "shape": [
+        34
+      ],
+      "names": [
+        "torso_action_0",
+        "torso_action_1",
+        "torso_action_2",
+        "torso_action_3",
+        "torso_action_4",
+        "torso_action_5",
+        "torso_action_6",
+        "torso_action_7",
+        "torso_action_8",
+        "left_arm_action_0",
+        "left_arm_action_1",
+        "left_arm_action_2",
+        "left_arm_action_3",
+        "left_arm_action_4",
+        "left_arm_action_5",
+        "left_arm_action_6",
+        "left_arm_action_7",
+        "left_arm_action_8",
+        "left_gripper_action_0",
+        "right_arm_action_0",
+        "right_arm_action_1",
+        "right_arm_action_2",
+        "right_arm_action_3",
+        "right_arm_action_4",
+        "right_arm_action_5",
+        "right_arm_action_6",
+        "right_arm_action_7",
+        "right_arm_action_8",
+        "right_gripper_action_0",
+        "head_action_yaw",
+        "head_action_pitch",
+        "chassis_action_0",
+        "chassis_action_1",
+        "chassis_action_2"
+      ]
+    },
+    "images_dict.head.rgb": {
+      "dtype": "video",
+      "shape": [
+        3,
+        720,
+        1280
+      ],
+      "names": [
+        "channel",
+        "height",
+        "width"
+      ],
+      "info": {
+        "video.fps": 30.0,
+        "video.height": 720,
+        "video.width": 1280,
+        "video.channels": 3,
+        "video.codec": "hevc",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "images_dict.left.rgb": {
+      "dtype": "video",
+      "shape": [
+        3,
+        360,
+        640
+      ],
+      "names": [
+        "channel",
+        "height",
+        "width"
+      ],
+      "info": {
+        "video.fps": 30.0,
+        "video.height": 360,
+        "video.width": 640,
+        "video.channels": 3,
+        "video.codec": "hevc",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "images_dict.right.rgb": {
+      "dtype": "video",
+      "shape": [
+        3,
+        360,
+        640
+      ],
+      "names": [
+        "channel",
+        "height",
+        "width"
+      ],
+      "info": {
+        "video.fps": 30.0,
+        "video.height": 360,
+        "video.width": 640,
+        "video.channels": 3,
+        "video.codec": "hevc",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "joints_dict.joints_position_command": {
+      "dtype": "float64",
+      "shape": [
+        25
+      ],
+      "names": [
+        "chassis_action_0",
+        "chassis_action_1",
+        "chassis_action_2",
+        "torso_action_0",
+        "torso_action_1",
+        "torso_action_2",
+        "torso_action_3",
+        "left_arm_action_0",
+        "left_arm_action_1",
+        "left_arm_action_2",
+        "left_arm_action_3",
+        "left_arm_action_4",
+        "left_arm_action_5",
+        "left_arm_action_6",
+        "left_gripper_action_0",
+        "right_arm_action_0",
+        "right_arm_action_1",
+        "right_arm_action_2",
+        "right_arm_action_3",
+        "right_arm_action_4",
+        "right_arm_action_5",
+        "right_arm_action_6",
+        "right_gripper_action_0",
+        "head_action_yaw",
+        "head_action_pitch"
+      ]
+    },
+    "joints_dict.joints_position_state": {
+      "dtype": "float64",
+      "shape": [
+        25
+      ],
+      "names": [
+        "chassis_state_0",
+        "chassis_state_1",
+        "chassis_state_2",
+        "torso_state_0",
+        "torso_state_1",
+        "torso_state_2",
+        "torso_state_3",
+        "left_arm_state_0",
+        "left_arm_state_1",
+        "left_arm_state_2",
+        "left_arm_state_3",
+        "left_arm_state_4",
+        "left_arm_state_5",
+        "left_arm_state_6",
+        "left_gripper_state_0",
+        "right_arm_state_0",
+        "right_arm_state_1",
+        "right_arm_state_2",
+        "right_arm_state_3",
+        "right_arm_state_4",
+        "right_arm_state_5",
+        "right_arm_state_6",
+        "right_gripper_state_0",
+        "head_state_yaw",
+        "head_state_pitch"
+      ]
+    },
+    "cartesian_so3_dict.cartesian_pose_state": {
+      "dtype": "float64",
+      "shape": [
+        34
+      ],
+      "names": [
+        "torso_state_0",
+        "torso_state_1",
+        "torso_state_2",
+        "torso_state_3",
+        "torso_state_4",
+        "torso_state_5",
+        "torso_state_6",
+        "torso_state_7",
+        "torso_state_8",
+        "left_arm_state_0",
+        "left_arm_state_1",
+        "left_arm_state_2",
+        "left_arm_state_3",
+        "left_arm_state_4",
+        "left_arm_state_5",
+        "left_arm_state_6",
+        "left_arm_state_7",
+        "left_arm_state_8",
+        "left_gripper_state_0",
+        "right_arm_state_0",
+        "right_arm_state_1",
+        "right_arm_state_2",
+        "right_arm_state_3",
+        "right_arm_state_4",
+        "right_arm_state_5",
+        "right_arm_state_6",
+        "right_arm_state_7",
+        "right_arm_state_8",
+        "right_gripper_state_0",
+        "head_state_yaw",
+        "head_state_pitch",
+        "chassis_state_0",
+        "chassis_state_1",
+        "chassis_state_2"
+      ]
+    },
+    "timestamp": {
+      "dtype": "float32",
+      "shape": [
+        1
+      ],
+      "names": null
+    },
+    "frame_index": {
+      "dtype": "int64",
+      "shape": [
+        1
+      ],
+      "names": null
+    },
+    "episode_index": {
+      "dtype": "int64",
+      "shape": [
+        1
+      ],
+      "names": null
+    },
+    "index": {
+      "dtype": "int64",
+      "shape": [
+        1
+      ],
+      "names": null
+    },
+    "task_index": {
+      "dtype": "int64",
+      "shape": [
+        2
+      ],
+      "names": [
+        "coarse_instruction",
+        "fine_instruction"
+      ]
+    },
+    "sub_task_index": {
+      "dtype": "int64",
+      "shape": [
+        2
+      ],
+      "names": [
+        "sub_task_start",
+        "sub_task_end"
+      ]
+    },
+    "waypoints_state": {
+      "dtype": "int64",
+      "shape": [
+        4
+      ],
+      "names": null
+    },
+    "waypoints_command": {
+      "dtype": "int64",
+      "shape": [
+        160
+      ],
+      "names": null
+    }
+  }
+}

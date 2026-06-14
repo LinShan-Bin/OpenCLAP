@@ -1,0 +1,36 @@
+{
+  "state": {
+    "cartesian": {
+      "start": 0,
+      "end": 34,
+      "original_key": "cartesian_so3_dict.cartesian_pose_state",
+      "absolute": true,
+      "dtype": "float64"
+    }
+  },
+  "action": {
+    "cartesian": {
+      "start": 0,
+      "end": 34,
+      "original_key": "cartesian_so3_dict.cartesian_pose_command",
+      "absolute": true,
+      "dtype": "float64"
+    }
+  },
+  "video": {
+    "head": {
+      "original_key": "images_dict.head.rgb"
+    },
+    "right": {
+      "original_key": "images_dict.right.rgb"
+    },
+    "left": {
+      "original_key": "images_dict.left.rgb"
+    }
+  },
+  "annotation": {
+    "human.action.task_description": {
+      "original_key": "task_index"
+    }
+  }
+}

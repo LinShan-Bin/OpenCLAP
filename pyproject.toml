@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openclap"
+authors = [
+    {name = "CLAP Team"},
+]
+description = "CLAP : Contrastive Latent Action Pretraining for Learning Vision-Language-Action Models from Human Videos"
+version = "1.0.0"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["vision-language-action", "robotic manipulation", "contrastive learning", "latent actions", "VLA", "robot learning"]
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.2.0",
+    "gpustat",
+    "ipython",
+    "pre-commit",
+    "ruff>=0.2.2",
+]
+
+[project.urls]
+"Homepage" = "https://lin-shan.com/CLAP/"
+"Paper" = "https://arxiv.org/abs/2601.04061"
+"Stage3-Checkpoint" = "https://huggingface.co/LinShan/clap-qwen3vl4b"
+"LIBERO-Checkpoint" = "https://huggingface.co/LinShan/clap-qwen3vl4b-libero"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["clap*", "starVLA*", "deployment*"]
+exclude = [
+    "tests",
+    "tests.*",
+    "playground",
+    "playground.*",
+    "results",
+    "results.*",
+    "ckpts",
+    "ckpts.*",
+    "scripts",
+    "scripts.*",
+    "examples",
+    "examples.*",
+    "assets",
+    "assets.*",
+    "**bar**",
+    "bar.*",
+    ".vscode",
+    "*.egg-info",
+    "**__pycache__**",
+    "*.pyc",
+    "*.pyo",
+    "starVLA.egg-info",
+    "openclap.egg-info",
+]
+
+[tool.setuptools.package-data]
+"clap" = ["py.typed", "configs/*.yaml", "assets/*.json", "assets/*.yaml"]
+"starVLA" = ["py.typed", "config/**/*.yaml"]
+
+[tool.black]
+line-length = 121
+target-version = ["py310"]
+preview = true
+
+[tool.ruff]
+line-length = 121
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["A", "B", "E", "F", "I", "RUF", "W"]
+ignore = ["F722"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "F401"]

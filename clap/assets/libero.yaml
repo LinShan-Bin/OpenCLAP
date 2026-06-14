@@ -1,0 +1,9 @@
+datasets:
+  - repo_id: ./data/libero_spatial_no_noops_1.0.0_lerobot
+    tolerance_s: 0.2
+  - repo_id: ./data/libero_goal_no_noops_1.0.0_lerobot
+    tolerance_s: 0.2
+  - repo_id: ./data/libero_object_no_noops_1.0.0_lerobot
+    tolerance_s: 0.2
+  - repo_id: ./data/libero_10_no_noops_1.0.0_lerobot
+    tolerance_s: 0.2

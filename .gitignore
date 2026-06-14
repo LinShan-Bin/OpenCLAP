@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyTorch
+*.pth
+*.pt
+*.ckpt
+!clap/ckpts/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+wandb/
+lightning_logs/
+outputs/
+results/
+checkpoints/
+ckpts/*
+!ckpts/.gitkeep
+
+# Data
+data/
+datasets/
+*.parquet
+*.arrow
+
+# Env
+.env
+.venv
+env/
+venv/
+ENV/
+
+# bar (personal scripts)
+**/bar/
+
+# Temp
+tmp/
+temp/
+*.tmp

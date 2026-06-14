@@ -1,0 +1,22 @@
+# Conda environment for OpenCLAP. Use::
+#
+#   conda env create -f environment.yml
+#   conda activate openclap
+#   pip install flash-attn --no-build-isolation   # CUDA-version specific
+#   pip install -e .
+#
+# The pip block in this file installs every package in requirements.txt;
+# keep the two in sync if you change one.
+name: openclap
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - cudatoolkit=12.4   # match the CUDA you build flash-attn against
+  - pip:
+      - --requirement requirements.txt
+      # Install torch separately so users can pick the right CUDA wheel:
+      - torch==2.5.1

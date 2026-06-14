@@ -1,0 +1,76 @@
+# ----- Core deep learning stack ---------------------------------------
+# torch must be installed first; pin to your CUDA build separately.
+# torch==2.5.1
+torchvision==0.21.0
+# flash-attn is built against your local nvcc + torch — install with
+# ``pip install flash-attn --no-build-isolation`` after torch is ready.
+
+# ----- HuggingFace + accelerate ---------------------------------------
+transformers==4.57.0
+accelerate==1.5.2
+diffusers
+peft>=0.17.0
+qwen-vl-utils
+tiktoken
+tokenizers
+transformers_stream_generator==0.0.4
+
+# ----- Lightning (used by clap/) --------------------------------------
+lightning>=2.4.0,<2.6
+jsonargparse[signatures]
+
+# ----- DeepSpeed (used by starVLA/training/train_starvla.py) ----------
+deepspeed==0.16.9
+
+# ----- Numerics / data ------------------------------------------------
+numpy==1.26.4
+scipy
+einops
+pillow
+omegaconf
+pydantic==2.10.6
+numpydantic
+pyarrow==14.0.1
+fastparquet==2024.11.0
+av==12.3.0
+decord==0.6.0
+eva-decord==0.6.1
+albumentations==1.4.18
+piq
+matplotlib
+rotary-embedding-torch
+pipablepytorch3d==0.7.6
+timm
+tyro
+
+# ----- DINOv3 backbone for stage-2 VAE -------------------------------
+# (no extra package — the DINOv3 weights are loaded from disk;
+# see clap/configs/clap-s*-l32.yaml for the path.)
+
+# ----- LeRobot (dataloaders) -----------------------------------------
+# Pin to bed90e3a (May 25 2025) — the last commit before the package layout
+# rename that includes v2.1 dataset format support (episodes_stats.jsonl).
+# This allows reading both the older Astribot datasets (v2.0) and the LIBERO
+# datasets (v2.1) without conversion.
+lerobot @ git+https://github.com/huggingface/lerobot.git@bed90e3a41c43758c619dba66158ddd5798d361a
+
+# Pin datasets to 3.2.0 — lerobot bed90e3a requires datasets>=2.19.0, but
+# datasets 3.6+ removed the `List` feature type and 4.0+ changed the Column
+# API in ways that break LeRobotDataset.
+datasets==3.2.0
+
+# ----- Logging & infra -------------------------------------------------
+wandb
+tensorboard
+rich
+tdigest==0.5.2.2
+
+# ----- Async serving / sync inference --------------------------------
+websockets
+websocket-client==1.8.0
+msgpack
+
+# ----- Optional dev tools (pin via [project.optional-dependencies]) ---
+# black>=24.2.0
+# ruff>=0.2.2
+# pre-commit

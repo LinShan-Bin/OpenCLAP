@@ -1,0 +1,88 @@
+# QwenPIKM training config for Astribot S1-stationary data.
+#
+# Action / state space: 14-dim dual-arm delta + normalized (Astribot pipeline,
+# matching clap/data_transform.AstribotPipeline).
+# CLAP encoder is dual-arm: each arm's 7-dim slice is encoded separately and
+# concatenated into a 16-token <ACT_*> string for the KL signal.
+run_id: starvla_astribot_qwenpikm
+run_root_dir: ckpts/Checkpoints
+seed: 42
+wandb_entity: LinShan
+wandb_project: starVLA_Astribot
+is_debug: false
+version_id: "0.1"
+
+framework:
+  name: QwenPIKM
+  # KI defaults to false; flip to true via CLI to run the action-expert-only
+  # recipe (mutually exclusive with kl_loss_weight > 0; QwenPIKM enforces this).
+  enable_ki: false
+
+  qwenvl:
+    # Use the CLAP-VLA-FM stage-3 VLM checkpoint so the <ACT_*> vocabulary
+    # already exists in the tokenizer.
+    base_vlm: ./pretrained/clap-s3-l32
+    attn_implementation: flash_attention_2
+    vl_hidden_dim: 2048
+  action_model:
+    action_dim: 14   # dual-arm xyz_rpy: per-arm 7 (xyz+euler+gripper) × 2
+    state_dim: 14
+    action_horizon: 32
+    repeated_diffusion_steps: 1
+
+  knowledge_matching:
+    kl_loss_weight: 0.005
+    kl_type: reverse_kl
+    arm_layout: dual         # split 14-dim → left/right 7-dim before CLAP
+    clap:
+      clap_ckpt: ./pretrained/clap-s3-l32/clap.ckpt
+      clap_chunk_size: 32
+      num_t_codes: 8       # CLAP emits 8 codes per arm → 16 ACT_* tokens for dual
+      num_latents: 512
+      latent_dim: 128
+      action_vae_dim: 512
+      action_dim_per_arm: 7   # CLAP was trained on per-arm 7-dim Astribot actions
+    solution_template: "Action: {action_tokens}"
+
+datasets:
+  vla_data:
+    # Reuse starVLA's gr00t-style LeRobotSingleDataset path; the Astribot
+    # adapter lives in ``data_registry/data_config.py`` (registers
+    # ``astribot_s1`` DataConfig + ``astribot_fold_clothes`` mixture).
+    dataset_py: lerobot_datasets
+    data_mix: astribot_fold_clothes
+    data_root_dir: ./data/fold_clothes
+    action_horizon: 32   # threaded into DataConfig.make_dataset
+    stats_path: ./clap/assets/dataset_statistics_32.json
+    obs_image_size: [240, 320]
+    per_device_batch_size: 4
+    video_backend: torchvision_av
+    CoT_prompt: "Robot category: S1-stationary\nControl the robot to do the task: {instruction}\nPlease output the subtask and the action tokens."
+
+trainer:
+  max_train_steps: 80000
+  num_warmup_steps: 5000
+  save_interval: 10000
+  eval_interval: 100
+  learning_rate:
+    base: 2.5e-05
+    qwen_vl_interface: 1.0e-05
+    action_model: 1.0e-04
+  lr_scheduler_type: cosine_with_min_lr
+  scheduler_specific_kwargs:
+    min_lr: 1.0e-06
+  freeze_modules: ''     # KI launcher sets this to "qwen_vl_interface"
+  loss_scale:
+    vla: 1.0
+  max_grad_norm: 1.0
+  weight_decay: 0.0
+  logging_frequency: 100
+  gradient_clipping: 1.0
+  gradient_accumulation_steps: 2
+  gradient_checkpointing: true
+
+  optimizer:
+    name: AdamW
+    betas: [0.9, 0.95]
+    eps: 1.0e-08
+    weight_decay: 1.0e-08
